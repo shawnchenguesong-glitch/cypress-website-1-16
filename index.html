@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>柏社CYPRESS - 专业出版社</title>
+    <link rel="stylesheet" href="public/css/style.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <h1>柏社CYPRESS</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="creators.html">创作者</a></li>
+                <li><a href="publish.html">发表作品</a></li>
+                <li><a href="login.html" id="login-link">登录</a></li>
+                <li><a href="register.html" id="register-link">注册</a></li>
+                <li><a href="admin.html" id="admin-link" style="display: none;">管理员</a></li>
+                <li><a href="account.html" id="account-link" style="display: none;">我的账户</a></li>
+                <li><a href="#" id="logout-link" style="display: none;">退出</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <div class="container">
+            <h2>欢迎来到柏社CYPRESS</h2>
+            <p><a href="p5animation.html" class="hero-text-link">将理想融入艺术与现实</a></p>
+            <a href="publish.html" class="btn btn-primary">发表作品</a>
+        </div>
+    </section>
+
+    <!-- 特色区域 -->
+    <section class="features">
+        <div class="container">
+            <div class="feature-card">
+                <h3>专业出版</h3>
+                <p>提供专业的出版服务，让你的作品更具影响力</p>
+            </div>
+            <div class="feature-card">
+                <h3>创作者社区</h3>
+                <p>加入我们的创作者社区，与同行交流学习</p>
+            </div>
+            <div class="feature-card">
+                <h3>作品展示</h3>
+                <p>展示你的作品，获得更多读者关注</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 最新作品 -->
+    <section class="latest-works">
+        <div class="container">
+            <h2>最新作品</h2>
+            <div class="works-grid" id="works-grid">
+                <!-- 作品将通过JavaScript动态加载 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 柏社CYPRESS. 保留所有权利.</p>
+            <p>&copy; 2025 Baishe CYPRESS. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="public/js/auth.js"></script>
+    <script src="public/js/works.js"></script>
+    <script src="public/js/comments.js"></script>
+    <script src="public/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>赋予管理员权限</title>
+</head>
+<body>
+    <h1>赋予管理员权限</h1>
+    <div id="result"></div>
+    
+    <script>
+        // 目标邮箱
+        const targetEmail = "bbc_1125@qq.com";
+        
+        // 直接操作localStorage，避免依赖auth.js中的函数
+        function getAllUsers() {
+            const users = localStorage.getItem('users');
+            return users ? JSON.parse(users) : [];
+        }
+        
+        function saveAllUsers(users) {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+        
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+        
+        // 获取所有用户
+        const users = getAllUsers();
+        
+        // 查找目标用户
+        const targetUser = users.find(user => user.email === targetEmail);
+        
+        const resultDiv = document.getElementById('result');
+        
+        if (targetUser) {
+            // 如果用户存在，更新为管理员
+            targetUser.role = 'admin';
+            saveAllUsers(users);
+            resultDiv.innerHTML = `已成功将用户 ${targetUser.username} (${targetEmail}) 设为管理员`;
+        } else {
+            // 如果用户不存在，创建新的管理员用户
+            const username = targetEmail.split('@')[0];
+            const newAdmin = {
+                id: generateId(),
+                username: username,
+                email: targetEmail,
+                password: "$2a$10$examplehashedpassword", // 这里使用一个示例密码，实际使用时需要修改
+                role: 'admin',
+                createdAt: new Date().toISOString()
+            };
+            users.push(newAdmin);
+            saveAllUsers(users);
+            resultDiv.innerHTML = `已成功创建新的管理员用户 ${username} (${targetEmail})`;
+        }
+        
+        // 显示所有用户信息
+        console.log('所有用户信息:', getAllUsers());
+    </script>
+</body>
+</html>

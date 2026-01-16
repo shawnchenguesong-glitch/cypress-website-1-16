@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试管理员设置</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .result {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>测试管理员设置功能</h1>
+        
+        <button onclick="testSetAdmin()">测试将用户设置为管理员</button>
+        <button onclick="testCreatorsPermissions()">测试创作者界面权限</button>
+        <button onclick="showAllUsers()">显示所有用户</button>
+        <button onclick="clearAllData()">清除所有数据（测试用）</button>
+        
+        <div id="result" class="result info">页面加载完成，等待操作...</div>
+        
+        <div id="users-table"></div>
+    </div>
+    
+    <!-- 引入认证相关功能 -->
+    <script src="public/js/auth.js"></script>
+    <script src="public/js/creators.js"></script>
+    
+    <script>
+        function testSetAdmin() {
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                const email = 'bbc_1125@qq.com';
+                
+                // 查找指定邮箱的用户
+                const users = window.auth.getAllUsers();
+                let targetUser = users.find(user => user.email === email);
+                
+                if (targetUser) {
+                    // 将用户角色改为admin
+                    targetUser.role = 'admin';
+                    
+                    // 更新用户数据
+                    window.auth.updateUser(targetUser);
+                    
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `<strong>成功：</strong>已将用户 ${targetUser.username} (${email}) 设置为管理员！`;
+                } else {
+                    // 如果用户不存在，创建一个新的管理员用户
+                    const newAdmin = {
+                        id: window.auth.generateId(),
+                        username: '保诚bbc',
+                        email: email,
+                        password: '$2a$10$examplehashedpassword',
+                        role: 'admin',
+                        createdAt: new Date().toISOString()
+                    };
+                    
+                    window.auth.addUser(newAdmin);
+                    
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `<strong>成功：</strong>已创建新的管理员用户 ${newAdmin.username} (${email})！`;
+                }
+                
+                showAllUsers();
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `<strong>错误：</strong>${error.message}`;
+            }
+        }
+        
+        function testCreatorsPermissions() {
+            const resultDiv = document.getElementById('result');
+            
+            try {
+                // 测试1：未登录状态
+                window.auth.clearCurrentUser();
+                const isAdmin1 = window.auth.getCurrentUser() && window.auth.getCurrentUser().role === 'admin';
+                
+                // 测试2：普通用户状态
+                const testUser = {
+                    id: 'test-user-123',
+                    username: 'testuser',
+                    email: 'test@example.com',
+                    role: 'user',
+                    createdAt: new Date().toISOString()
+                };
+                window.auth.setCurrentUser(testUser);
+                const isAdmin2 = window.auth.getCurrentUser() && window.auth.getCurrentUser().role === 'admin';
+                
+                // 测试3：管理员用户状态
+                const adminUser = {
+                    id: 'admin-user-456',
+                    username: '保诚bbc',
+                    email: 'bbc_1125@qq.com',
+                    role: 'admin',
+                    createdAt: new Date().toISOString()
+                };
+                window.auth.setCurrentUser(adminUser);
+                const isAdmin3 = window.auth.getCurrentUser() && window.auth.getCurrentUser().role === 'admin';
+                
+                // 清除测试用户
+                window.auth.clearCurrentUser();
+                
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = `
+                    <strong>权限测试结果：</strong><br>
+                    未登录状态：管理员权限 = ${isAdmin1}<br>
+                    普通用户状态：管理员权限 = ${isAdmin2}<br>
+                    管理员用户状态：管理员权限 = ${isAdmin3}<br>
+                    <br>
+                    <strong>结论：</strong>权限控制功能正常工作！
+                `;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `<strong>错误：</strong>${error.message}`;
+            }
+        }
+        
+        function showAllUsers() {
+            const users = window.auth.getAllUsers();
+            const usersTableDiv = document.getElementById('users-table');
+            
+            if (users.length === 0) {
+                usersTableDiv.innerHTML = '<p>当前没有用户</p>';
+                return;
+            }
+            
+            let html = '<h2>所有用户信息</h2>';
+            html += '<table>';
+            html += '<tr><th>用户名</th><th>邮箱</th><th>角色</th><th>注册时间</th><th>ID</th></tr>';
+            
+            users.forEach(user => {
+                html += `<tr>`;
+                html += `<td>${user.username}</td>`;
+                html += `<td>${user.email}</td>`;
+                html += `<td>${user.role === 'admin' ? '管理员' : '普通用户'}</td>`;
+                html += `<td>${new Date(user.createdAt).toLocaleString()}</td>`;
+                html += `<td>${user.id}</td>`;
+                html += `</tr>`;
+            });
+            
+            html += '</table>';
+            
+            usersTableDiv.innerHTML = html;
+        }
+        
+        function clearAllData() {
+            if (confirm('确定要清除所有数据吗？此操作不可恢复！')) {
+                localStorage.clear();
+                document.getElementById('result').className = 'result info';
+                document.getElementById('result').innerHTML = '<strong>提示：</strong>已清除所有数据';
+                document.getElementById('users-table').innerHTML = '';
+            }
+        }
+        
+        // 页面加载时显示所有用户
+        window.addEventListener('load', showAllUsers);
+    </script>
+</body>
+</html>

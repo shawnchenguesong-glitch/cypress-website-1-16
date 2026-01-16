@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创作者 - 柏社CYPRESS</title>
+    <link rel="stylesheet" href="public/css/style.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <h1>柏社CYPRESS</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="creators.html" class="active">创作者</a></li>
+                <li><a href="publish.html">发表作品</a></li>
+                <li><a href="login.html" id="login-link">登录</a></li>
+                <li><a href="register.html" id="register-link">注册</a></li>
+                <li><a href="admin.html" id="admin-link" style="display: none;">管理员</a></li>
+                <li><a href="account.html" id="account-link" style="display: none;">我的账户</a></li>
+                <li><a href="#" id="logout-link" style="display: none;">退出</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 创作者介绍 -->
+    <section class="creators">
+        <div class="container">
+            <h2>创作者介绍</h2>
+            <div id="creators-list" class="creators-grid">
+                <!-- 创作者信息将通过JavaScript动态加载 -->
+            </div>
+            
+            <!-- 管理员编辑按钮 -->
+            <div id="admin-edit-section" style="display: none; margin-top: 20px;">
+                <button id="add-creator-btn" class="btn btn-primary">添加创作者</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 添加/编辑创作者模态框 -->
+    <div id="creator-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 id="modal-title">添加创作者</h3>
+            <form id="creator-form">
+                <input type="hidden" id="creator-id" name="id">
+                <div class="form-group">
+                    <label for="creator-name">姓名</label>
+                    <input type="text" id="creator-name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="creator-bio">简介</label>
+                    <textarea id="creator-bio" name="bio" rows="5" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="creator-avatar">头像</label>
+                    <input type="file" id="creator-avatar" name="avatar" accept="image/*">
+                </div>
+                <button type="submit" class="btn btn-primary">保存</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 柏社CYPRESS. 保留所有权利.</p>
+            <p>&copy; 2025 Baishe CYPRESS. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="public/js/auth.js"></script>
+    <script src="public/js/creators.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发表作品 - 柏社CYPRESS</title>
+    <link rel="stylesheet" href="public/css/style.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <h1>柏社CYPRESS</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="creators.html">创作者</a></li>
+                <li><a href="publish.html" class="active">发表作品</a></li>
+                <li><a href="login.html" id="login-link">登录</a></li>
+                <li><a href="register.html" id="register-link">注册</a></li>
+                <li><a href="admin.html" id="admin-link" style="display: none;">管理员</a></li>
+                <li><a href="account.html" id="account-link" style="display: none;">我的账户</a></li>
+                <li><a href="#" id="logout-link" style="display: none;">退出</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 发表作品表单 -->
+    <section class="publish">
+        <div class="container">
+            <div class="form-container">
+                <h2>发表作品</h2>
+                <form id="publish-form">
+                    <div class="form-group">
+                        <label for="title">作品标题</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">分类</label>
+                        <select id="category" name="category">
+                            <option value="fiction">小说</option>
+                            <option value="poetry">诗歌</option>
+                            <option value="essay">散文</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">作品内容</label>
+                        <textarea id="content" name="content" rows="10" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="cover">封面图片</label>
+                        <input type="file" id="cover" name="cover" accept="image/*">
+                    </div>
+                    <button type="submit" class="btn btn-primary">发表作品</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 柏社CYPRESS. 保留所有权利.</p>
+            <p>&copy; 2025 Baishe CYPRESS. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="public/js/auth.js"></script>
+    <script src="public/js/publish.js"></script>
+</body>
+</html>

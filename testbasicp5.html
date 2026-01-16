@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic P5.js Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        function setup() {
+            createCanvas(windowWidth, windowHeight);
+            background(0);
+            console.log('Setup completed');
+        }
+        
+        function draw() {
+            background(0);
+            fill(255);
+            textSize(32);
+            text('HELLO', 100, 100);
+            console.log('Frame drawn');
+        }
+    </script>
+</body>
+</html>

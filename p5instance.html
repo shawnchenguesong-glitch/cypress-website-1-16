@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P5.js 实例模式测试</title>
+    <!-- 引入p5.js库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        #canvas-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    <script>
+        // 使用p5.js的实例模式
+        const sketch = (p5) => {
+            // 文字对象数组
+            let textArray = [];
+            
+            p5.setup = () => {
+                // 创建画布
+                const canvas = p5.createCanvas(p5.windowWidth, p5.windowHeight);
+                canvas.parent('canvas-container');
+                p5.background(0);
+                
+                // 设置文字参数
+                p5.textAlign(p5.LEFT, p5.TOP);
+                p5.textSize(16);
+                p5.fill(255);
+                
+                // 填充文字到画布
+                fillTextToCanvas(p5);
+                
+                // 添加调试信息
+                console.log('Setup completed');
+                console.log('Text array length:', textArray.length);
+            };
+            
+            p5.draw = () => {
+                // 绘制背景
+                p5.background(0);
+                
+                // 绘制文字
+                drawText(p5);
+                
+                // 生成爆炸
+                generateExplosions(p5);
+                
+                // 添加调试信息（每30帧输出一次）
+                if (p5.frameCount % 30 === 0) {
+                    console.log('Draw frame:', p5.frameCount);
+                }
+            };
+            
+            p5.windowResized = () => {
+                p5.resizeCanvas(p5.windowWidth, p5.windowHeight);
+                // 重新填充文字以适应新的画布大小
+                fillTextToCanvas(p5);
+            };
+            
+            p5.mousePressed = () => {
+                fillTextToCanvas(p5);
+            };
+            
+            // 填充文字到画布
+            function fillTextToCanvas(p5) {
+                // 清空文字数组
+                textArray = [];
+                
+                // 文字设置
+                const fontSize = 16;
+                const lineHeight = fontSize + 12;
+                const letterSpacing = fontSize * 1.2;
+                
+                // 画布内容区域
+                const contentWidth = p5.width * 0.8;
+                const contentHeight = p5.height * 0.8;
+                const startX = (p5.width - contentWidth) / 2;
+                const startY = (p5.height - contentHeight) / 2;
+                const endX = p5.width - startX;
+                const endY = p5.height - startY;
+                
+                // 当前位置
+                let currentX = startX;
+                let currentY = startY;
+                
+                // 定义随机字符集
+                const charSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                
+                // 循环填充文字直到内容区域填满
+                let count = 0;
+                while (true) {
+                    // 生成随机字符
+                    const randomChar = charSet.charAt(p5.floor(p5.random(charSet.length)));
+                    
+                    // 创建文字对象
+                    const textObj = {
+                        char: randomChar,
+                        x: currentX,
+                        y: currentY,
+                        originalX: currentX,
+                        originalY: currentY,
+                        opacity: 255,
+                        exploded: false,
+                        vx: 0,
+                        vy: 0
+                    };
+                    
+                    // 添加到文字数组
+                    textArray.push(textObj);
+                    count++;
+                    
+                    // 更新位置
+                    currentX += letterSpacing;
+                    
+                    // 自动换行
+                    if (currentX > endX) {
+                        currentY += lineHeight;
+                        currentX = startX;
+                        
+                        // 如果超出内容区域底部，停止填充
+                        if (currentY > endY) {
+                            break;
+                        }
+                    }
+                    
+                    // 添加安全检查，防止无限循环
+                    if (count > 10000) {
+                        console.log('Breaking loop after 10000 iterations');
+                        break;
+                    }
+                }
+                
+                console.log('Filled text to canvas, count:', count);
+            }
+            
+            // 绘制文字
+            function drawText(p5) {
+                textArray.forEach(textObj => {
+                    // 设置文字颜色和透明度
+                    p5.fill(255, textObj.opacity);
+                    
+                    // 绘制文字
+                    p5.text(textObj.char, textObj.x, textObj.y);
+                    
+                    // 如果文字已经爆炸，应用物理效果
+                    if (textObj.exploded) {
+                        // 更新位置
+                        textObj.x += textObj.vx;
+                        textObj.y += textObj.vy;
+                        
+                        // 添加阻尼
+                        textObj.vx *= 0.98;
+                        textObj.vy *= 0.98;
+                    }
+                });
+            }
+            
+            // 生成爆炸
+            function generateExplosions(p5) {
+                // 根据爆炸速率生成爆炸
+                if (p5.random(1) < 0.01) {
+                    // 随机选择爆炸中心
+                    const centerX = p5.random(p5.width);
+                    const centerY = p5.random(p5.height);
+                    
+                    // 查找爆炸范围内的文字
+                    textArray.forEach(textObj => {
+                        const d = p5.dist(centerX, centerY, textObj.x, textObj.y);
+                        if (d < 100) {
+                            // 计算从中心向外递减的强度
+                            const strength = 10 * (1 - d / 100);
+                            
+                            // 随机爆炸方向
+                            const angle = p5.random(p5.TWO_PI);
+                            
+                            // 设置爆炸速度
+                            textObj.vx = p5.cos(angle) * strength;
+                            textObj.vy = p5.sin(angle) * strength;
+                            
+                            // 标记为已爆炸
+                            textObj.exploded = true;
+                        }
+                    });
+                }
+            }
+        };
+        
+        // 初始化p5.js实例
+        const myp5 = new p5(sketch);
+        console.log('p5.js instance created:', myp5);
+    </script>
+</body>
+</html>

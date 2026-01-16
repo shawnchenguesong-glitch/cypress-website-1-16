@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员控制面板 - 柏社CYPRESS</title>
+    <link rel="stylesheet" href="public/css/style.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <h1>柏社CYPRESS</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="creators.html">创作者</a></li>
+                <li><a href="publish.html">发表作品</a></li>
+                <li><a href="login.html" id="login-link">登录</a></li>
+                <li><a href="register.html" id="register-link">注册</a></li>
+                <li><a href="admin.html" id="admin-link" class="active">管理员</a></li>
+                <li><a href="account.html" id="account-link" style="display: none;">我的账户</a></li>
+                <li><a href="#" id="logout-link" style="display: none;">退出</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 管理员控制面板 -->
+    <section class="admin">
+        <div class="container">
+            <h2>管理员控制面板</h2>
+            
+            <!-- 标签页导航 -->
+            <div class="admin-tabs">
+                <button class="tab-btn active" data-tab="users">用户管理</button>
+                <button class="tab-btn" data-tab="works">作品管理</button>
+                <button class="tab-btn" data-tab="settings">网站设置</button>
+            </div>
+            
+            <!-- 用户管理 -->
+            <div id="users" class="tab-content active">
+                <h3>用户列表</h3>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>用户名</th>
+                            <th>邮箱</th>
+                            <th>身份</th>
+                            <th>注册时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body">
+                        <!-- 用户数据将通过JavaScript动态加载 -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 作品管理 -->
+            <div id="works" class="tab-content">
+                <h3>作品列表</h3>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>标题</th>
+                            <th>作者</th>
+                            <th>分类</th>
+                            <th>发表时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="works-table-body">
+                        <!-- 作品数据将通过JavaScript动态加载 -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 网站设置 -->
+            <div id="settings" class="tab-content">
+                <h3>网站设置</h3>
+                <form id="settings-form">
+                    <div class="form-group">
+                        <label for="site-name">网站名称</label>
+                        <input type="text" id="site-name" name="site-name" value="柏社CYPRESS" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="site-description">网站描述</label>
+                        <textarea id="site-description" name="site-description" rows="3" required>专业的出版平台，让你的作品闪耀光芒</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">保存设置</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 柏社CYPRESS. 保留所有权利.</p>
+            <p>&copy; 2025 Baishe CYPRESS. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="public/js/auth.js"></script>
+    <script src="public/js/works.js"></script>
+    <script src="public/js/admin.js"></script>
+</body>
+</html>

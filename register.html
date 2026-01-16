@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册 - 柏社CYPRESS</title>
+    <link rel="stylesheet" href="public/css/style.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <h1>柏社CYPRESS</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="creators.html">创作者</a></li>
+                <li><a href="publish.html">发表作品</a></li>
+                <li><a href="login.html">登录</a></li>
+                <li><a href="register.html" class="active">注册</a></li>
+                <li><a href="admin.html" id="admin-link" style="display: none;">管理员</a></li>
+                <li><a href="account.html" id="account-link" style="display: none;">我的账户</a></li>
+                <li><a href="#" id="logout-link" style="display: none;">退出</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 注册表单 -->
+    <section class="register">
+        <div class="container">
+            <div class="form-container">
+                <h2>用户注册</h2>
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="username">用户名</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">邮箱（验证码将发送到该邮箱）</label>
+                        <input type="email" id="email" name="email" required placeholder="请输入邮箱地址">
+                    </div>
+                    <div class="form-group">
+                        <label for="verification-code">验证码</label>
+                        <div class="verification-code-container">
+                            <input type="text" id="verification-code" name="verification-code" required placeholder="请输入6位验证码">
+                            <button type="button" id="send-verification-code" class="btn btn-secondary">发送验证码</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">密码</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">确认密码</label>
+                        <input type="password" id="confirm-password" name="confirm-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">身份</label>
+                        <select id="role" name="role">
+                            <option value="user">普通用户</option>
+                            <option value="creator">创作者</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">注册</button>
+                </form>
+                <p class="login-link">已有账号？<a href="login.html">立即登录</a></p>
+                
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 柏社CYPRESS. 保留所有权利.</p>
+            <p>&copy; 2025 Baishe CYPRESS. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="public/js/auth.js"></script>
+    <script src="public/js/verification-code.js"></script>
+    <script src="public/js/register.js"></script>
+</body>
+</html>

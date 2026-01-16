@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P5.js 测试</title>
+    <!-- 引入p5.js库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <script>
+        // 检查p5.js是否已经加载
+        console.log('p5.js loaded:', typeof p5 !== 'undefined');
+        console.log('createCanvas:', typeof createCanvas);
+        console.log('background:', typeof background);
+        console.log('fill:', typeof fill);
+        console.log('textSize:', typeof textSize);
+        console.log('textAlign:', typeof textAlign);
+        console.log('text:', typeof text);
+    </script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // 简单的动画测试
+        let x = 0;
+        let y = 0;
+        
+        function setup() {
+            createCanvas(windowWidth, windowHeight);
+            background(0);
+            console.log('Setup completed');
+            x = width / 2;
+            y = height / 2;
+        }
+        
+        function draw() {
+            background(0);
+            fill(255);
+            textSize(32);
+            textAlign(CENTER, CENTER);
+            text('P5.js 测试', x, y);
+            
+            // 添加简单的动画效果
+            x = width / 2 + sin(frameCount * 0.05) * 100;
+            y = height / 2 + cos(frameCount * 0.05) * 100;
+            
+            console.log('Draw frame:', frameCount);
+        }
+        
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+            x = width / 2;
+            y = height / 2;
+        }
+    </script>
+</body>
+</html>

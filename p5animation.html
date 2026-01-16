@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P5.js 文字爆炸效果</title>
+    <!-- 引入p5.js库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            font-family: Arial, sans-serif;
+            overflow: hidden; /* 防止滚动条 */
+        }
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin: 20px 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+            font-size: 24px;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin: 20px 0;
+            color: #3498db;
+            text-decoration: none;
+            font-size: 16px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+            color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="dynamic-title">柏社CYPRESS</h1>
+    <a href="index.html" class="back-link">返回首页</a>
+    
+    <script>
+        // p5.js 文字爆炸效果
+        
+        // 文字对象数组
+        let textArray = [];
+        
+        function setup() {
+            // 创建画布
+            createCanvas(windowWidth, windowHeight);
+            background(0);
+            
+            // 设置文字参数
+            textAlign(LEFT, TOP);
+            textSize(24); // 增大字体大小
+            fill(255); // 使用白色文字
+            
+            // 填充文字到画布
+            fillTextToCanvas();
+            console.log('Setup completed with', textArray.length, 'characters');
+        }
+        
+        function draw() {
+            // 绘制背景
+            background(0);
+            
+
+            
+            // 绘制文字
+            for (let i = 0; i < textArray.length; i++) {
+                let textObj = textArray[i];
+                
+                // 绘制文字
+                fill(255);
+                text(textObj.char, textObj.x, textObj.y);
+                
+                // 如果文字已经爆炸，应用物理效果
+                if (textObj.exploded) {
+                    // 更新位置
+                    textObj.x += textObj.vx;
+                    textObj.y += textObj.vy;
+                    
+                    // 添加阻尼
+                    textObj.vx *= 0.98;
+                    textObj.vy *= 0.98;
+                }
+            }
+            
+            // 随机生成爆炸
+            if (random(1) < 0.05) { // 增加爆炸频率
+                let centerX = random(width);
+                let centerY = random(height);
+                
+                for (let i = 0; i < textArray.length; i++) {
+                    let textObj = textArray[i];
+                    let d = dist(centerX, centerY, textObj.x, textObj.y);
+                    
+                    if (d < 150) { // 增大爆炸范围
+                        let strength = 10 * (1 - d / 150);
+                        let angle = random(TWO_PI);
+                        
+                        textObj.vx = cos(angle) * strength;
+                        textObj.vy = sin(angle) * strength;
+                        textObj.exploded = true;
+                    }
+                }
+            }
+        }
+        
+        function fillTextToCanvas() {
+            textArray = [];
+            
+            // 文字设置
+            const fontSize = 24;
+            const lineHeight = fontSize + 10;
+            const letterSpacing = fontSize * 1.0;
+            
+            // 画布内容区域
+            const startX = 20; // 减小左边距以适应移动端
+            const startY = 60; // 减小上边距以适应移动端
+            
+            // 从诗歌中提取所有文字
+            const poem = `影子的梦与精神病 
+
+ 我亲爱的果子，我也是一颗果子 
+ 我们从虚妄里来，饮尽大地的泪 
+ 我们用绳线串起过往，过往挂在窗上 
+ 窗沿随星空闪烁。闪烁的不是窗沿 
+ 闪烁的是山顶的风。宇宙的沉默 
+
+ 如果生命是鱼，那海洋是母亲 
+ 母亲。我们见过。母亲 
+ 在月色刚起，树梢分出影子的时候 
+ 我们见过。月是圆环，那旧日就是圆环的影 
+ 在所有圆环中，旋转的圆环——虚无的圆环中 
+ 我们见过。海洋是你的母亲。圆环里的是我 
+
+ 石块破碎，绳线捆住的不是石块 
+ 捆住的石块是我。圆环里的石块是我 
+ 湖底的石块是我——绳索也是我。 
+ 你说为了热情，甘愿饮下一池灰湖 
+ 灰湖。如镜的灰湖，不正是你吗—— 
+
+ 搁浅的鲸。挣扎吧 
+ 海浪会在风起的时候 
+ ——淹没你也淹没我 
+
+
+ 渴 
+
+ 我常期待一场不着边际的细雨 
+ 为歌颂夕阳苦难困厄住一切祝福 
+ 你常盼望一场无休止符的夏季 
+ 把呢喃亲口封印 
+ 寄温柔可爱的邮递 
+ 不愿祈祷将来某日不再被细雨捆住束手就擒 
+ 可荒原枯草终究无可避免回归大地 
+ 过去现在其他苦难辉煌 
+ 伤疤并非永远郑重示众 
+
+ 予你曾记 
+ 淡忘并非冰释前嫌 
+ 我渴望并回味着夏季每一场氤氲 
+ 细雨蒙住我的来时路 
+ 我双目模糊，双耳目击细雨荡涤 
+ 记忆金水 
+ 相伴离开回归天地 
+
+
+ 梦 
+
+ 梦是青春虚无缥缈的慰藉 
+ 梦是忧伤苦楚难以言说的倾诉 
+ 梦是真实存在的吗？ 
+ 梦是什么？ 
+ 梦是迷雾青草地执迷不悟的清晰 
+ 我希望着期望去梦 
+ 这是一场奢侈的预判 
+ 它不会自然生长结果，也无须耕耘 
+ 梦是雪渍随机飘落的泪滴 
+ 画一坛烂泥融雪 
+ 呢喃耳边羞涩酒红 
+ 梦是寒天冷气代码的解析 
+ 梦有缺憾完满 
+ 我并不确定这一切是否拥抱过真谛 
+ 雨后暖阳短暂的笑意 
+ 梦不是完全不切实际的 
+ 梦是你我，我们 
+ 周遭境遇确切地生长 
+ 梦是我们不可实现的完满 
+ 我的记忆中 
+ 风是连绵起伏的山峦 
+ 眼皮一旦被单整齐 
+ 万次风声目色 
+ 送去带来悲欢喜剧 
+ 累了就睡去 
+ 酷暑的唯一 
+
+
+
+ 风会记得 
+
+ 灰土地里有我的烙印 
+ 万次风声回响 
+ 擦拭过双耳的弦音 
+ 捋捋发里内外丝绪 
+ 和烦恼不安睡在肩膀 
+ 齐整眼皮被单 
+ 护卫住一整晚的好情绪 
+ 不用惧怕粗犷的鼾声轰鸣 
+ 它不像火车有轨道行径 
+ 它有自己谱写的墓志铭 
+
+
+ 总未有 
+
+ 总有那么几棵树喜爱不合时宜的悸动 
+ 秋分未了，树冠便匆匆黄去 
+ 总有那么几场雨中意相逢未半的离去 
+ 夏至未至，心绪且惴惴老去 
+ 可不像迎风飘扬的风衣 
+ 喜新厌旧，沉浸在和前路过去告别 
+ 轻轻粗糙略过高山风峦 
+ 同朝阳风声诉说今天的乐趣 
+ 曾记下 
+ “告别是人生的必修课” 
+ 可总是不及格 
+
+
+
+ 连接 
+
+ 从梦境抽离……连接 
+ 不属于自己的手，感受身体 
+ 我在何处？为何世界 
+ 与我隔离。连接 
+
+ 我好像，又做错什么了。 
+
+
+ 余烬 
+
+ 城风在宇宙下起落 
+ 那些人如何得到自由 
+ 是我用夜晚描绘感动的歌 
+ 还是总有些如此萧索的往事 
+
+ 梦境为了谁而诞生又消失 
+ 我们都在月亮下望着 
+ 月亮送给夕阳或者破晓 
+ 我和你，那些故事， 
+ 不可以被大海吞没 
+
+ 从这里找到我，或者离开我 
+ 从这里捡起我，或者去角落 
+ 从这里归于我，或者去忘怀 
+ 从这里为灰烬，或者重来过 
+
+ 这是漫长的寂寞吗，还是我的独舞 
+ 我要如何，我要如何写下不完的雨 
+ 下不完的雪，那些成为余烬的大火 
+ 烧灭在最终落下的夜色里 
+
+ 为了谁唱歌，为了谁着墨 
+ 阅读，描绘，用记忆，封存不悔的回风 
+ 为了谁让骤雨尽落，如一城弹剑作歌 
+ 我们都在岁月里，被时间水浸没 
+
+ 心跳国，一城原野，大海，聚落 
+ 路过闪电，一晃有光，照彻群鸟，流闪扑烁 
+ 飞过森林，深绿绒，粉色星球，执灯者王座 
+ 玫瑰花，小王子，水晶城堡，狐狸和蛇 
+
+ 旧夜，长街，雅蓝彩塔，红绯神阁 
+ 一千世，一千年，你我烟雨，沙中生落 
+ 日暖蓝云，人潮内外 
+ 命路南北，说与不说 
+ 月色瓢泼，一灯柔和，万转迷宫里 
+ ——终归遇见过。 
+
+
+ 笔墨纸艳 
+
+ 是从海水之暗，掬一舀星河， 
+ 又或从漫天星河里，借几颗星子 
+ 你是我的利刃，在锻未锻之处 
+ 你是我的梅花，是开终开之骨 
+ 我拿一捧流银，或为你唱歌 
+ 我舀一勺月亮，或为谁宽恕 
+ 是一根骨骼接着血肉 
+ 你在我心脏绽放成花后—— 
+ 我将捧着你的手，为你的嘴唇长颂 
+ 像一首旧诗，翻出时光的纹路 
+ 你在新的海浪里航，却不吞没我 
+ 从此我坦诚相交，赌输我的欲望 
+ 为你留行，或者音符长长的拖尾 
+ 是桃红粉，像魅夜的明灯流燃 
+ 送我一颗禁果，榨成不朽的允诺 
+ 把无色的人间，染得那么绚烂 
+
+
+ 铁旅盈盈 
+
+ 言秋事重抬，风不见碎雪，成彩画中里。 
+ 车转秋山，照别熟瞬的景。铁嵌入地之路，“哐当哐当”，轻流的雷。无烟的星轨，牵闪烁的长河。 
+ 一柄山寒万刃冰，扶摇接天风。四方九霄，八千里路，一抬头青蓝长空，纯白的气团绒绒，若流动的幼龙。 
+ 旧牛奶，盒饭味道，烟渣，桔子色芬达。 
+
+
+ 何如雨止 
+
+ 潮响的碎风，云翳的光影 
+ 你站在灰色公路尽头，吹来云色和风彩 
+ 但没有大雨瓢泼，长原沁绵的野绿 
+ 你说我们还有月亮，你说我们能搬到一起 
+ 那是很科幻的写作，我会笑着看你 
+ 你指向头顶，是二百颗细亮的星 
+ 冬野会融化，成甜黑色卷云 
+ 我为你哼唱，道路铺展进梦里 
+ 下楼的阶梯，芝士抹绿，还有你喜欢的咖啡厅 
+ 橙红长海，盛大铺开，城日锦绣的潮夕 
+ 一起烟雨，两点朦光，你和我是子集 
+ 闹市喧欢，豆沙果子，穿过香水的风雨 
+ 我在这样的岁月里，慢慢地，一点点筑你 
+ 直到风真的唱歌，少年长笛，直到把这些忘记 
+ 太阳，流星，苔痕上阶绿，海岛数据 
+ 红茧，蓝的翼，成长生息，我在风尽时等你。 
+
+
+
+ 十里秋意吞白阳，无人知里，酥黄叶，潇潇下。木苔提香门作画，拢金石音，青翠滴水。 
+ 小路闲庭，又楼长起，威风八面。 
+ 旧里熟景，百转千绕，万花镜。红檀时计，上下落沙，余雪雨。 
+ 人桃花卦。`;
+            
+            // 提取所有非空白字符
+            const poemChars = poem.split('').filter(char => char.trim() !== '');
+            
+            // 在画布上填充文字网格
+            let currentX = startX;
+            let currentY = startY;
+            let charIndex = 0;
+            
+            while (currentY < height - 40) {
+                currentX = startX;
+                while (currentX < width - 40 && charIndex < poemChars.length) {
+                    let textObj = {
+                        char: poemChars[charIndex],
+                        x: currentX,
+                        y: currentY,
+                        exploded: false,
+                        vx: 0,
+                        vy: 0
+                    };
+                    textArray.push(textObj);
+                    
+                    currentX += letterSpacing;
+                    charIndex++;
+                }
+                currentY += lineHeight;
+                
+                // 如果诗歌字符用完了，就重新开始
+                if (charIndex >= poemChars.length) {
+                    charIndex = 0;
+                }
+            }
+            
+            console.log('Filled canvas with', textArray.length, 'characters from poem');
+        }
+        
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+            fillTextToCanvas();
+        }
+    </script>
+    
+    <!-- 动态字体变化脚本 -->
+    <script>
+        // 定义多种字体
+        const fonts = [
+            'Arial',
+            'Helvetica',
+            'Times New Roman',
+            'Courier New',
+            'Georgia',
+            'Verdana',
+            'Impact',
+            'Comic Sans MS',
+            'Trebuchet MS',
+            'Palatino'
+        ];
+        
+        // 获取标题元素
+        const title = document.getElementById('dynamic-title');
+        
+        // 每200毫秒随机切换一种字体
+        setInterval(() => {
+            const randomFont = fonts[Math.floor(Math.random() * fonts.length)];
+            title.style.fontFamily = randomFont;
+        }, 200);
+    </script>
+</body>
+</html>
